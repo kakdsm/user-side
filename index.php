@@ -1,8 +1,6 @@
 <?php
-ob_start();
-if (session_status() === PHP_SESSION_NONE) {
-  session_start();
-}
+require_once './php/session_init.php';
+
 
 include './php/check_maintenance.php';
 include './php/phplogin.php';

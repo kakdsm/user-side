@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $audit->execute();
         $audit->close();
 
-        header("Location: home.php");
+        header("Location: ./php/home.php");
         exit();
       } else {
 

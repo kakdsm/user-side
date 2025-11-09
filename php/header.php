@@ -16,6 +16,10 @@
 <body>
 <?php
 
+if (session_status() === PHP_SESSION_NONE) {
+  ob_start(); // start output buffering at the very top
+  session_start();
+}
 include_once 'database.php';
 
 $isLoggedIn = isset($_SESSION['userid']);

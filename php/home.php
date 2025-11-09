@@ -108,6 +108,8 @@
 <body>
 <?php
 include 'check_maintenance.php';
+ob_start(); // start output buffering at the very top
+session_start();
 include 'database.php';
 include 'header.php'; 
 

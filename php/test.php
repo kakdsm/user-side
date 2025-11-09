@@ -382,15 +382,12 @@
   
 
     // Call the recommendation API
-    fetch('http://localhost:5000/recommend', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        skills: selectedPoints
-      })
-    })
+   fetch('https://flaskjft.up.railway.app/recommend', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ skills: skillsArray })
+})
+
     .then(response => {
       console.log('API Response Status:', response.status);
       console.log('API Response Headers:', response.headers);

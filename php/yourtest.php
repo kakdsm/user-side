@@ -1,6 +1,6 @@
 <?php
 session_start();
-$database_path = '../../backend/php/database.php';
+$database_path = 'database.php';
 
 if (!file_exists($database_path)) {
     die("Database connection file not found at: " . $database_path);

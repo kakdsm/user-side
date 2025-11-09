@@ -108,7 +108,6 @@
 <body>
 <?php
 include 'check_maintenance.php';
-session_start();
 include 'database.php';
 include 'header.php'; 
 

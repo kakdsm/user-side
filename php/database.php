@@ -1,4 +1,6 @@
 <?php
+session_start(); // ALWAYS first
+
 // Get database credentials from environment variables
 $DB_SERVER = getenv("MYSQLHOST");
 $DB_USER   = getenv("MYSQLUSER");

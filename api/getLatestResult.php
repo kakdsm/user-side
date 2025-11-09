@@ -1,5 +1,5 @@
 <?php
-require_once 'session_init.php';
+require_once '../php/session_init.php';
 include '../php/database.php';
 
 // Add error reporting for debugging

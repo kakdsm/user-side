@@ -1,5 +1,5 @@
 <?php
-session_start(); // ALWAYS first
+
 
 // Get database credentials from environment variables
 $DB_SERVER = getenv("MYSQLHOST");
@@ -19,7 +19,7 @@ try {
             PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8mb4'"
         ]
     );
-    echo "✅ PDO connected successfully.<br>";
+
 } catch (PDOException $e) {
     exit("❌ PDO Connection Error: " . $e->getMessage());
 }
@@ -30,6 +30,6 @@ $con = mysqli_connect($DB_SERVER, $DB_USER, $DB_PASS, $DB_NAME, $DB_PORT);
 if (!$con) {
     exit("❌ MySQLi Connection Error: " . mysqli_connect_error());
 } else {
-    echo "✅ MySQLi connected successfully.<br>";
+    
 }
 ?>

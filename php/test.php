@@ -382,10 +382,11 @@
   
 
     // Call the recommendation API
-   fetch('https://flaskjft.up.railway.app/recommend', {
+ // Call the recommendation API
+fetch('https://flaskjft.up.railway.app/recommend', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ skills: skillsArray })
+  body: JSON.stringify({ skills: selectedPoints })
 })
 
     .then(response => {

@@ -1,4 +1,9 @@
 <?php
+
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+
 include './php/check_maintenance.php';
 include './php/phplogin.php';
 ?>
@@ -17,9 +22,7 @@ include './php/phplogin.php';
   <link rel="stylesheet" href="./css/login.css?v=3">
 </head>
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-  session_start();
-}
+
 include_once './php/database.php';
 
 $error = "";

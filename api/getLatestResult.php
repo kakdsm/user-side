@@ -1,6 +1,6 @@
 <?php
-session_start();
-include '../../backend/php/database.php';
+require_once 'session_init.php';
+include '../php/database.php';
 
 // Add error reporting for debugging
 error_reporting(E_ALL);

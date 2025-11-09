@@ -14,14 +14,12 @@
   <link rel="stylesheet" href="../css/profile2.css?v=15">
 <?php
 include 'check_maintenance.php';
-
-if (session_status() === PHP_SESSION_NONE) {
-  session_start();
-}
+require_once 'session_init.php';
+-
 include 'database.php';
 
 if (!isset($_SESSION['userid'])) {
-  header("Location: login.php");
+  header("Location: ../index.php");
   exit();
 }
 

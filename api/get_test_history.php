@@ -1,8 +1,7 @@
 <?php
-ob_start();
-session_start();
+require_once 'session_init.php';
 
-include '../../backend/php/database.php';
+include '../php/database.php';
 
 ob_clean();
 header('Content-Type: application/json');

@@ -15,7 +15,7 @@
 <?php
 include 'check_maintenance.php';
 require_once 'session_init.php';
--
+
 include 'database.php';
 
 if (!isset($_SESSION['userid'])) {

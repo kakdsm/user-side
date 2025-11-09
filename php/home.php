@@ -907,7 +907,46 @@ async function loadRecommendedJobs() {
 
 function loadTestStatistics() {
     console.log('Loading test statistics...');
-
+    
+    fetch('../api/home_stats.php')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Statistics data received:', data);
+            
+            if (data.success) {
+                // Update the statistics display
+                const statBoxes = document.querySelectorAll('.stat-box .stat-value');
+                
+                if (statBoxes.length >= 3) {
+                    // Update "Test Taken Today" - using stats.today_tests
+                    statBoxes[0].textContent = data.stats.today_tests || '0';
+                    
+                    // Update "Total Test Taken" - using stats.total_tests
+                    statBoxes[1].textContent = data.stats.total_tests || '0';
+                    
+                    // Update "Results rated as accurate or very accurate" - using stats.accuracy_percentage
+                    statBoxes[2].textContent = (data.stats.accuracy_percentage || '95') + '%';
+                    
+                    console.log('Statistics updated successfully');
+                    console.log('Today:', data.stats.today_tests, 'Total:', data.stats.total_tests, 'Accuracy:', data.stats.accuracy_percentage + '%');
+                } else {
+                    console.error('Not enough stat boxes found');
+                    setDefaultStatistics();
+                }
+            } else {
+                console.error('Failed to load statistics:', data.message);
+                setDefaultStatistics();
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching statistics:', error);
+            setDefaultStatistics();
+        });
 }
 
 

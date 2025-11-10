@@ -5,7 +5,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JOBFITSYSTEM</title>
-  <link rel="icon" href="../image/philkoeilogo.png" type="image/png">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
@@ -108,8 +107,11 @@
 </style>
 <body>
 <?php
+require_once 'session_init.php';
+
 include 'check_maintenance.php';
-session_start();
+
+
 include 'database.php';
 include 'header.php'; 
 
@@ -512,7 +514,7 @@ $stmtSys->close();
     <img src="../image/ftest.png" alt="Feature Image">
     <div class="feature-txt">
       <h1>Hiring and Job Opportunities at Philkoei International, Inc.</h1>
-      <p><br>Philkoei International, Inc. attracts skilled talents through an efficient hiring system that evaluates applicants based on their skills, qualifications, and experience to ensure the right fit for every role.<br></p>
+      <p><br>Philkoei International, Inc. is dedicated to attracting skilled and talented individuals through its efficient hiring and job posting system. The company ensures that every applicant is evaluated based on their competencies, qualifications, and professional background. By maintaining a transparent and organized recruitment process, Philkoei International, Inc. aims to match the right people to the right roles, fostering growth and excellence within the organization.<br></p>
     </div>
   </div>
 </div>
@@ -905,7 +907,46 @@ async function loadRecommendedJobs() {
 
 function loadTestStatistics() {
     console.log('Loading test statistics...');
-
+    
+    fetch('../api/home_stats.php')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Statistics data received:', data);
+            
+            if (data.success) {
+                // Update the statistics display
+                const statBoxes = document.querySelectorAll('.stat-box .stat-value');
+                
+                if (statBoxes.length >= 3) {
+                    // Update "Test Taken Today" - using stats.today_tests
+                    statBoxes[0].textContent = data.stats.today_tests || '0';
+                    
+                    // Update "Total Test Taken" - using stats.total_tests
+                    statBoxes[1].textContent = data.stats.total_tests || '0';
+                    
+                    // Update "Results rated as accurate or very accurate" - using stats.accuracy_percentage
+                    statBoxes[2].textContent = (data.stats.accuracy_percentage || '95') + '%';
+                    
+                    console.log('Statistics updated successfully');
+                    console.log('Today:', data.stats.today_tests, 'Total:', data.stats.total_tests, 'Accuracy:', data.stats.accuracy_percentage + '%');
+                } else {
+                    console.error('Not enough stat boxes found');
+                    setDefaultStatistics();
+                }
+            } else {
+                console.error('Failed to load statistics:', data.message);
+                setDefaultStatistics();
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching statistics:', error);
+            setDefaultStatistics();
+        });
 }
 
 

@@ -274,6 +274,7 @@ section {
           font-size: 16px; 
         }
 
+      
         .content-area {
             flex: 1;
             padding: 30px;
@@ -294,7 +295,7 @@ section {
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Card Styles */
+
         .card {
             background: white;
             border-radius: 8px;
@@ -309,6 +310,57 @@ section {
             font-size: 20px;
             font-weight: 600;
         }
+
+
+     
+@media (max-width: 900px) {
+ 
+  #test-history .card > div[style*="display: flex"] {
+    flex-direction: column;     
+    align-items: stretch;
+  }
+
+  #test-history .card > div[style*="display: flex"] > div {
+    flex: 1 1 100%;
+    width: 100%;
+    margin: 0 0 20px 0;
+  }
+
+
+  #test-history .card > div[style*="display: flex"] > div:last-child {
+    margin-bottom: 0;
+  }
+
+
+  #skillChart {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 300px;
+  }
+
+
+  #chartLegend,
+  #skillChart {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .content-area {
+    padding: 15px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .card h3 {
+    font-size: 18px;
+  }
+}
 
         .title-row {
   display: flex;

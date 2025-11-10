@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JOBFITSYSTEM</title>
+  <link rel="icon" href="../image/philkoeilogo.png" type="image/png">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
@@ -511,7 +512,7 @@ $stmtSys->close();
     <img src="../image/ftest.png" alt="Feature Image">
     <div class="feature-txt">
       <h1>Hiring and Job Opportunities at Philkoei International, Inc.</h1>
-      <p><br>Philkoei International, Inc. is dedicated to attracting skilled and talented individuals through its efficient hiring and job posting system. The company ensures that every applicant is evaluated based on their competencies, qualifications, and professional background. By maintaining a transparent and organized recruitment process, Philkoei International, Inc. aims to match the right people to the right roles, fostering growth and excellence within the organization.<br></p>
+      <p><br>Philkoei International, Inc. attracts skilled talents through an efficient hiring system that evaluates applicants based on their skills, qualifications, and experience to ensure the right fit for every role.<br></p>
     </div>
   </div>
 </div>

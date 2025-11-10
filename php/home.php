@@ -881,7 +881,7 @@ async function loadRecommendedJobs() {
             paginationContainer.style.display = 'none';
             noResults.style.display = 'block';
             noResults.innerHTML = `
-                <h3>No recommended jobs found</h3>
+                <h3>${data.message}No recommended jobs found</h3>
                 <p>Complete your career assessment to get personalized job recommendations</p>
                 <a href="yourtest.php" class="assessment-btn">Take Assessment</a>
             `;

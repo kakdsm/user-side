@@ -9,10 +9,12 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type');
 
+// Check if user is logged in
 if (!isset($_SESSION['userid'])) {
     echo json_encode([
         'success' => false, 
-        'message' => 'Please log in to see recommended jobs'
+        'message' => 'Please log in to see recommended jobs',
+        'code' => 'NOT_LOGGED_IN'
     ]);
     exit();
 }
@@ -30,7 +32,8 @@ try {
     if ($checkResult->num_rows === 0) {
         echo json_encode([
             'success' => false, 
-            'message' => 'Please complete the career assessment first to get personalized recommendations'
+            'message' => 'Please complete the career assessment first to get personalized recommendations',
+            'code' => 'NO_ASSESSMENT'
         ]);
         exit();
     }
@@ -49,7 +52,8 @@ try {
     if (empty($recommendedRoles)) {
         echo json_encode([
             'success' => false, 
-            'message' => 'No career recommendations found in your test results'
+            'message' => 'No career recommendations found in your test results',
+            'code' => 'NO_RECOMMENDATIONS'
         ]);
         exit();
     }
@@ -103,7 +107,8 @@ try {
     if (empty($recommendedJobs)) {
         echo json_encode([
             'success' => false, 
-            'message' => 'No current job openings match your career recommendations. Please check back later.'
+            'message' => 'No current job openings match your career recommendations. Please check back later.',
+            'code' => 'NO_MATCHING_JOBS'
         ]);
     } else {
         echo json_encode([
@@ -118,7 +123,8 @@ try {
     error_log("Recommended jobs error: " . $e->getMessage());
     echo json_encode([
         'success' => false, 
-        'message' => 'System error: ' . $e->getMessage()
+        'message' => 'System error: ' . $e->getMessage(),
+        'code' => 'SERVER_ERROR'
     ]);
 }
 ?>

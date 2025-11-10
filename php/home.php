@@ -724,12 +724,173 @@ function applyFilters() {
 }
 
 
+async function loadRecommendedJobs() {
+    try {
+        const response = await fetch('../api/filterJobs.php');
+        const data = await response.json();
+        
+        const jobGrid = document.getElementById('jobGrid');
+        const noResults = document.getElementById('noResults');
+        const paginationContainer = document.getElementById('paginationContainer');
+        const paginationInfo = document.getElementById('paginationInfo');
+        const pageNumbers = document.getElementById('pageNumbers');
+        
+        if (!jobGrid || !noResults || !paginationContainer || !paginationInfo || !pageNumbers) return;
+        
+        console.log('Recommended jobs API response:', data); // Debug log
+        
+        if (data.success && data.jobs && data.jobs.length > 0) {
+            // Show recommended jobs
+            jobGrid.innerHTML = '';
+            
+            data.jobs.forEach(job => {
+                const jobCard = document.createElement('div');
+                jobCard.className = 'job-card';
+
+                const formattedSalary = job.postsalary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+                jobCard.innerHTML = `
+                    <h3 class="job-title">${job.postjobrole}</h3>
+                    <div class="job-company">Philkoei International, Inc.</div>
+                    <div class="job-location">${job.postaddress}</div>
+                    <span class="job-type-badge badge-full-time">
+                        ${job.posttype}
+                    </span>
+                    <div class="job-salary">₱${formattedSalary} / month</div>
+                    <p class="job-description">${job.postsummary}</p>
+                    <button class="view-details-btn" 
+                        onclick="window.location.href='viewjob.php?<?php echo $isLoggedIn ? 'user_id=' . $userid . '&' : ''; ?>postid=${job.postid}'">
+                        View Details
+                    </button>
+                `;
+                
+                jobGrid.appendChild(jobCard);
+            });
+            
+            // Update pagination info for recommended jobs
+            paginationInfo.textContent = `Showing ${data.jobs.length} recommended jobs`;
+            
+            // Clear and hide pagination controls for recommended jobs
+            pageNumbers.innerHTML = '';
+            
+            // Show pagination container but with centered single info
+            paginationContainer.style.display = 'flex';
+            paginationContainer.style.justifyContent = 'center'; // Center the content
+            
+            // Hide the pagination controls (prev/next buttons) for recommended jobs
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+            const paginationControls = document.querySelector('.pagination-controls');
+            
+            if (prevButton) prevButton.style.display = 'none';
+            if (nextButton) nextButton.style.display = 'none';
+            if (paginationControls) paginationControls.style.display = 'none';
+            
+            noResults.style.display = 'none';
+            
+        } else {
+            // Handle different error cases
+            jobGrid.innerHTML = '';
+            paginationContainer.style.display = 'none'; // Hide pagination completely for errors
+            noResults.style.display = 'block';
+            
+            let message = data.message || 'No recommended jobs found';
+            let description = '';
+            let action = '';
+            
+            switch(data.code) {
+                case 'NOT_LOGGED_IN':
+                    message = 'Please Log In to See Recommended Jobs';
+                    description = 'You need to be logged in to view personalized job recommendations';
+                    action = '<a href="login.php" class="assessment-btn">Log In Now</a>';
+                    break;
+                    
+                case 'NO_ASSESSMENT':
+                    message = 'Complete Your Career Assessment';
+                    description = 'Take our career test to get personalized job recommendations based on your skills and interests';
+                    action = '<a href="yourtest.php" class="assessment-btn">Take Assessment Now</a>';
+                    break;
+                    
+                case 'NO_RECOMMENDATIONS':
+                    message = 'No Career Recommendations Found';
+                    description = 'We couldn\'t generate career recommendations from your test results. Please try taking the assessment again.';
+                    action = '<a href="yourtest.php" class="assessment-btn">Retake Assessment</a>';
+                    break;
+                    
+                case 'NO_MATCHING_JOBS':
+                    message = 'No Matching Jobs Available';
+                    description = 'Currently there are no job openings that match your career recommendations. Please check back later.';
+                    action = '<button onclick="refreshFilters()" class="assessment-btn">Browse All Jobs</button>';
+                    break;
+                    
+                default:
+                    message = 'No Recommended Jobs Found';
+                    description = 'Complete your career assessment to get personalized job recommendations';
+                    action = '<a href="yourtest.php" class="assessment-btn">Take Assessment</a>';
+                    break;
+            }
+            
+            noResults.innerHTML = `
+                <div class="no-results-content">
+                    <svg class="no-results-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.467-.881-6.08-2.33M15 17H9v-2.5A6.5 6.5 0 0115.5 8H18a3 3 0 013 3v6a3 3 0 01-3 3z"></path>
+                    </svg>
+                    <h3>${message}</h3>
+                    <p>${description}</p>
+                    ${action}
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Error fetching recommended jobs:', error);
+        const jobGrid = document.getElementById('jobGrid');
+        if (!jobGrid) return;
+        
+        jobGrid.innerHTML = '';
+        const noResults = document.getElementById('noResults');
+        const paginationContainer = document.getElementById('paginationContainer');
+        
+        if (!noResults || !paginationContainer) return;
+        
+        paginationContainer.style.display = 'none';
+        noResults.style.display = 'block';
+        noResults.innerHTML = `
+            <div class="no-results-content">
+                <svg class="no-results-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                </svg>
+                <h3>Unable to Load Recommendations</h3>
+                <p>Please try again later or complete your assessment</p>
+                <a href="yourtest.php" class="assessment-btn">Take Assessment</a>
+            </div>
+        `;
+    }
+}
+
+// Function to restore normal pagination when showing all jobs
+function restoreNormalPagination() {
+    const paginationContainer = document.getElementById('paginationContainer');
+    const prevButton = document.getElementById('prevButton');
+    const nextButton = document.getElementById('nextButton');
+    const paginationControls = document.querySelector('.pagination-controls');
+    
+    if (paginationContainer) {
+        paginationContainer.style.display = 'flex';
+        paginationContainer.style.justifyContent = 'space-between'; // Restore normal layout
+    }
+    if (prevButton) prevButton.style.display = 'flex';
+    if (nextButton) nextButton.style.display = 'flex';
+    if (paginationControls) paginationControls.style.display = 'flex';
+}
+
+// Update your refreshFilters function to restore pagination
 function refreshFilters() {
     currentFilter = 'all';
     currentPage = 1;
     document.getElementById('searchInput').value = '';
     filteredJobs = [...jobsData];
     updateDropdownDisplay('all');
+    restoreNormalPagination(); // Restore normal pagination
     renderJobs(filteredJobs);
 }
 
@@ -831,76 +992,6 @@ function updatePaginationControls(totalJobs, totalPages) {
         pageButton.textContent = i;
         pageButton.onclick = () => goToPage(i);
         pageNumbers.appendChild(pageButton);
-    }
-}
-
-async function loadRecommendedJobs() {
-    try {
-        const response = await fetch('../api/filterJobs.php');
-        const data = await response.json();
-        
-        const jobGrid = document.getElementById('jobGrid');
-        const noResults = document.getElementById('noResults');
-        const paginationContainer = document.getElementById('paginationContainer');
-        const paginationInfo = document.getElementById('paginationInfo');
-        
-        if (!jobGrid || !noResults || !paginationContainer || !paginationInfo) return;
-        
-        if (data.success && data.jobs && data.jobs.length > 0) {
-            jobGrid.innerHTML = '';
-            
-            data.jobs.forEach(job => {
-                const jobCard = document.createElement('div');
-                jobCard.className = 'job-card';
-
-                const formattedSalary = job.postsalary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-                jobCard.innerHTML = `
-                    <h3 class="job-title">${job.postjobrole}</h3>
-                    <div class="job-company">Philkoei International, Inc.</div>
-                    <div class="job-location">${job.postaddress}</div>
-                    <span class="job-type-badge badge-full-time">
-                        ${job.posttype}
-                    </span>
-                    <div class="job-salary">₱${formattedSalary} / month</div>
-                    <p class="job-description">${job.postsummary}</p>
-                    <button class="view-details-btn" 
-                        onclick="window.location.href='viewjob.php?<?php echo $isLoggedIn ? 'user_id=' . $userid . '&' : ''; ?>postid=${job.postid}'">
-                        View Details
-                    </button>
-                `;
-                
-                jobGrid.appendChild(jobCard);
-            });
-            paginationInfo.textContent = `Showing ${data.jobs.length} recommended jobs`;
-            paginationContainer.style.display = 'block';
-            noResults.style.display = 'none';
-            
-        } else {
-            jobGrid.innerHTML = '';
-            paginationContainer.style.display = 'none';
-            noResults.style.display = 'block';
-            noResults.innerHTML = `
-                <h3>${data.message}No recommended jobs found</h3>
-                <p>Complete your career assessment to get personalized job recommendations</p>
-                <a href="yourtest.php" class="assessment-btn">Take Assessment</a>
-            `;
-        }
-    } catch (error) {
-        console.error('Error fetching recommended jobs:', error);
-        const jobGrid = document.getElementById('jobGrid');
-        if (!jobGrid) return;
-        
-        jobGrid.innerHTML = '';
-        const noResults = document.getElementById('noResults');
-        if (!noResults) return;
-        
-        noResults.style.display = 'block';
-        noResults.innerHTML = `
-            <h3>Unable to load recommendations</h3>
-            <p>Please try again later or complete your assessment</p>
-            <a href="yourtest.php" class="assessment-btn">Take Assessment</a>
-        `;
     }
 }
 

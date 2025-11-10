@@ -515,7 +515,7 @@ $stmtSys->close();
     <img src="../image/ftest.png" alt="Feature Image">
     <div class="feature-txt">
       <h1>Hiring and Job Opportunities at Philkoei International, Inc.</h1>
-      <p><br>Philkoei International, Inc. is dedicated to attracting skilled and talented individuals through its efficient hiring and job posting system. The company ensures that every applicant is evaluated based on their competencies, qualifications, and professional background. By maintaining a transparent and organized recruitment process, Philkoei International, Inc. aims to match the right people to the right roles, fostering growth and excellence within the organization.<br></p>
+      <p><br>Philkoei International, Inc. attracts skilled talents through an efficient hiring system that evaluates applicants based on their skills, qualifications, and experience to ensure the right fit for every role.<br></p>
     </div>
   </div>
 </div>
